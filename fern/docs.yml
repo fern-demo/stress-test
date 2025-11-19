@@ -1,5 +1,5 @@
 instances:
-  - url: stress-test-fern.docs.buildwithfern.com
+  - url: fern-stress-test.docs.buildwithfern.com
 
 navigation:
   - section: Get started
