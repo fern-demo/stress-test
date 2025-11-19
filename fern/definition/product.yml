@@ -1,0 +1,273 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports:
+  common: common.yml
+
+service:
+  base-path: /product
+  auth: true
+
+  endpoints:
+    list:
+      display-name: List Products
+      method: GET
+      path: ""
+      request:
+        name: ListProductRequest
+        query-parameters:
+          limit:
+            type: optional<integer>
+          offset:
+            type: optional<integer>
+          sortBy:
+            type: optional<string>
+          order:
+            type: optional<common.SortOrder>
+      response: list<Product>
+
+    create:
+      display-name: Create Product
+      method: POST
+      path: ""
+      request: CreateProductRequest
+      response: Product
+
+    get:
+      display-name: Get Product by ID
+      method: GET
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      response: Product
+
+    update:
+      display-name: Update Product
+      method: PUT
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: UpdateProductRequest
+      response: Product
+
+    delete:
+      display-name: Delete Product
+      method: DELETE
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+
+    patch:
+      display-name: Patch Product
+      method: PATCH
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: PatchProductRequest
+      response: Product
+
+    search:
+      display-name: Search Products
+      method: POST
+      path: /search
+      request: SearchProductRequest
+      response: SearchProductResponse
+
+    count:
+      display-name: Count Products
+      method: GET
+      path: /count
+      response: integer
+
+    bulkCreate:
+      display-name: Bulk Create Products
+      method: POST
+      path: /bulk
+      request: list<CreateProductRequest>
+      response: list<Product>
+
+    bulkUpdate:
+      display-name: Bulk Update Products
+      method: PUT
+      path: /bulk
+      request: list<UpdateProductRequest>
+      response: list<Product>
+
+    bulkDelete:
+      display-name: Bulk Delete Products
+      method: DELETE
+      path: /bulk
+      request:
+        name: BulkDeleteProductRequest
+        body:
+          properties:
+            ids:
+              type: list<string>
+
+    export:
+      display-name: Export Products
+      method: POST
+      path: /export
+      request:
+        name: ExportProductRequest
+        body:
+          properties:
+            format:
+              type: string
+
+    importData:
+      display-name: Import Products
+      method: POST
+      path: /import
+      request:
+        name: ImportProductRequest
+        body:
+          properties:
+            format:
+              type: string
+            data:
+              type: string
+
+    validate:
+      display-name: Validate Product
+      method: POST
+      path: /validate
+      request: CreateProductRequest
+      response: boolean
+
+    duplicate:
+      display-name: Duplicate Product
+      method: POST
+      path: /{id}/duplicate
+      path-parameters:
+        id:
+          type: string
+      response: Product
+
+    archive:
+      display-name: Archive Product
+      method: POST
+      path: /{id}/archive
+      path-parameters:
+        id:
+          type: string
+      response: Product
+
+    restore:
+      display-name: Restore Product
+      method: POST
+      path: /{id}/restore
+      path-parameters:
+        id:
+          type: string
+      response: Product
+
+    getHistory:
+      display-name: Get Product History
+      method: GET
+      path: /{id}/history
+      path-parameters:
+        id:
+          type: string
+      response: list<ProductHistoryEntry>
+
+    getMetadata:
+      display-name: Get Product Metadata
+      method: GET
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      response: map<string, string>
+
+    updateMetadata:
+      display-name: Update Product Metadata
+      method: PUT
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      request:
+        name: UpdateProductMetadataRequest
+        body:
+          properties:
+            metadata:
+              type: map<string, string>
+
+types:
+  ProductStatus:
+    enum:
+      - active
+      - inactive
+      - pending
+      - archived
+
+  Product:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: ProductStatus
+      createdAt:
+        type: datetime
+      updatedAt:
+        type: datetime
+
+  CreateProductRequest:
+    properties:
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: optional<ProductStatus>
+
+  UpdateProductRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<ProductStatus>
+
+  PatchProductRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<ProductStatus>
+
+  SearchProductRequest:
+    properties:
+      query:
+        type: optional<string>
+      limit:
+        type: optional<integer>
+      offset:
+        type: optional<integer>
+
+  SearchProductResponse:
+    properties:
+      results:
+        type: list<Product>
+      total:
+        type: integer
+
+  ProductHistoryEntry:
+    properties:
+      timestamp:
+        type: datetime
+      action:
+        type: string
+      changedBy:
+        type: string

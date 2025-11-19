@@ -1,0 +1,273 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports:
+  common: common.yml
+
+service:
+  base-path: /subscription
+  auth: true
+
+  endpoints:
+    list:
+      display-name: List Subscriptions
+      method: GET
+      path: ""
+      request:
+        name: ListSubscriptionRequest
+        query-parameters:
+          limit:
+            type: optional<integer>
+          offset:
+            type: optional<integer>
+          sortBy:
+            type: optional<string>
+          order:
+            type: optional<common.SortOrder>
+      response: list<Subscription>
+
+    create:
+      display-name: Create Subscription
+      method: POST
+      path: ""
+      request: CreateSubscriptionRequest
+      response: Subscription
+
+    get:
+      display-name: Get Subscription by ID
+      method: GET
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      response: Subscription
+
+    update:
+      display-name: Update Subscription
+      method: PUT
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: UpdateSubscriptionRequest
+      response: Subscription
+
+    delete:
+      display-name: Delete Subscription
+      method: DELETE
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+
+    patch:
+      display-name: Patch Subscription
+      method: PATCH
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: PatchSubscriptionRequest
+      response: Subscription
+
+    search:
+      display-name: Search Subscriptions
+      method: POST
+      path: /search
+      request: SearchSubscriptionRequest
+      response: SearchSubscriptionResponse
+
+    count:
+      display-name: Count Subscriptions
+      method: GET
+      path: /count
+      response: integer
+
+    bulkCreate:
+      display-name: Bulk Create Subscriptions
+      method: POST
+      path: /bulk
+      request: list<CreateSubscriptionRequest>
+      response: list<Subscription>
+
+    bulkUpdate:
+      display-name: Bulk Update Subscriptions
+      method: PUT
+      path: /bulk
+      request: list<UpdateSubscriptionRequest>
+      response: list<Subscription>
+
+    bulkDelete:
+      display-name: Bulk Delete Subscriptions
+      method: DELETE
+      path: /bulk
+      request:
+        name: BulkDeleteSubscriptionRequest
+        body:
+          properties:
+            ids:
+              type: list<string>
+
+    export:
+      display-name: Export Subscriptions
+      method: POST
+      path: /export
+      request:
+        name: ExportSubscriptionRequest
+        body:
+          properties:
+            format:
+              type: string
+
+    importData:
+      display-name: Import Subscriptions
+      method: POST
+      path: /import
+      request:
+        name: ImportSubscriptionRequest
+        body:
+          properties:
+            format:
+              type: string
+            data:
+              type: string
+
+    validate:
+      display-name: Validate Subscription
+      method: POST
+      path: /validate
+      request: CreateSubscriptionRequest
+      response: boolean
+
+    duplicate:
+      display-name: Duplicate Subscription
+      method: POST
+      path: /{id}/duplicate
+      path-parameters:
+        id:
+          type: string
+      response: Subscription
+
+    archive:
+      display-name: Archive Subscription
+      method: POST
+      path: /{id}/archive
+      path-parameters:
+        id:
+          type: string
+      response: Subscription
+
+    restore:
+      display-name: Restore Subscription
+      method: POST
+      path: /{id}/restore
+      path-parameters:
+        id:
+          type: string
+      response: Subscription
+
+    getHistory:
+      display-name: Get Subscription History
+      method: GET
+      path: /{id}/history
+      path-parameters:
+        id:
+          type: string
+      response: list<SubscriptionHistoryEntry>
+
+    getMetadata:
+      display-name: Get Subscription Metadata
+      method: GET
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      response: map<string, string>
+
+    updateMetadata:
+      display-name: Update Subscription Metadata
+      method: PUT
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      request:
+        name: UpdateSubscriptionMetadataRequest
+        body:
+          properties:
+            metadata:
+              type: map<string, string>
+
+types:
+  SubscriptionStatus:
+    enum:
+      - active
+      - inactive
+      - pending
+      - archived
+
+  Subscription:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: SubscriptionStatus
+      createdAt:
+        type: datetime
+      updatedAt:
+        type: datetime
+
+  CreateSubscriptionRequest:
+    properties:
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: optional<SubscriptionStatus>
+
+  UpdateSubscriptionRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<SubscriptionStatus>
+
+  PatchSubscriptionRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<SubscriptionStatus>
+
+  SearchSubscriptionRequest:
+    properties:
+      query:
+        type: optional<string>
+      limit:
+        type: optional<integer>
+      offset:
+        type: optional<integer>
+
+  SearchSubscriptionResponse:
+    properties:
+      results:
+        type: list<Subscription>
+      total:
+        type: integer
+
+  SubscriptionHistoryEntry:
+    properties:
+      timestamp:
+        type: datetime
+      action:
+        type: string
+      changedBy:
+        type: string

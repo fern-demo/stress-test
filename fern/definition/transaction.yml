@@ -1,0 +1,273 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports:
+  common: common.yml
+
+service:
+  base-path: /transaction
+  auth: true
+
+  endpoints:
+    list:
+      display-name: List Transactions
+      method: GET
+      path: ""
+      request:
+        name: ListTransactionRequest
+        query-parameters:
+          limit:
+            type: optional<integer>
+          offset:
+            type: optional<integer>
+          sortBy:
+            type: optional<string>
+          order:
+            type: optional<common.SortOrder>
+      response: list<Transaction>
+
+    create:
+      display-name: Create Transaction
+      method: POST
+      path: ""
+      request: CreateTransactionRequest
+      response: Transaction
+
+    get:
+      display-name: Get Transaction by ID
+      method: GET
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      response: Transaction
+
+    update:
+      display-name: Update Transaction
+      method: PUT
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: UpdateTransactionRequest
+      response: Transaction
+
+    delete:
+      display-name: Delete Transaction
+      method: DELETE
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+
+    patch:
+      display-name: Patch Transaction
+      method: PATCH
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: PatchTransactionRequest
+      response: Transaction
+
+    search:
+      display-name: Search Transactions
+      method: POST
+      path: /search
+      request: SearchTransactionRequest
+      response: SearchTransactionResponse
+
+    count:
+      display-name: Count Transactions
+      method: GET
+      path: /count
+      response: integer
+
+    bulkCreate:
+      display-name: Bulk Create Transactions
+      method: POST
+      path: /bulk
+      request: list<CreateTransactionRequest>
+      response: list<Transaction>
+
+    bulkUpdate:
+      display-name: Bulk Update Transactions
+      method: PUT
+      path: /bulk
+      request: list<UpdateTransactionRequest>
+      response: list<Transaction>
+
+    bulkDelete:
+      display-name: Bulk Delete Transactions
+      method: DELETE
+      path: /bulk
+      request:
+        name: BulkDeleteTransactionRequest
+        body:
+          properties:
+            ids:
+              type: list<string>
+
+    export:
+      display-name: Export Transactions
+      method: POST
+      path: /export
+      request:
+        name: ExportTransactionRequest
+        body:
+          properties:
+            format:
+              type: string
+
+    importData:
+      display-name: Import Transactions
+      method: POST
+      path: /import
+      request:
+        name: ImportTransactionRequest
+        body:
+          properties:
+            format:
+              type: string
+            data:
+              type: string
+
+    validate:
+      display-name: Validate Transaction
+      method: POST
+      path: /validate
+      request: CreateTransactionRequest
+      response: boolean
+
+    duplicate:
+      display-name: Duplicate Transaction
+      method: POST
+      path: /{id}/duplicate
+      path-parameters:
+        id:
+          type: string
+      response: Transaction
+
+    archive:
+      display-name: Archive Transaction
+      method: POST
+      path: /{id}/archive
+      path-parameters:
+        id:
+          type: string
+      response: Transaction
+
+    restore:
+      display-name: Restore Transaction
+      method: POST
+      path: /{id}/restore
+      path-parameters:
+        id:
+          type: string
+      response: Transaction
+
+    getHistory:
+      display-name: Get Transaction History
+      method: GET
+      path: /{id}/history
+      path-parameters:
+        id:
+          type: string
+      response: list<TransactionHistoryEntry>
+
+    getMetadata:
+      display-name: Get Transaction Metadata
+      method: GET
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      response: map<string, string>
+
+    updateMetadata:
+      display-name: Update Transaction Metadata
+      method: PUT
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      request:
+        name: UpdateTransactionMetadataRequest
+        body:
+          properties:
+            metadata:
+              type: map<string, string>
+
+types:
+  TransactionStatus:
+    enum:
+      - active
+      - inactive
+      - pending
+      - archived
+
+  Transaction:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: TransactionStatus
+      createdAt:
+        type: datetime
+      updatedAt:
+        type: datetime
+
+  CreateTransactionRequest:
+    properties:
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: optional<TransactionStatus>
+
+  UpdateTransactionRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<TransactionStatus>
+
+  PatchTransactionRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<TransactionStatus>
+
+  SearchTransactionRequest:
+    properties:
+      query:
+        type: optional<string>
+      limit:
+        type: optional<integer>
+      offset:
+        type: optional<integer>
+
+  SearchTransactionResponse:
+    properties:
+      results:
+        type: list<Transaction>
+      total:
+        type: integer
+
+  TransactionHistoryEntry:
+    properties:
+      timestamp:
+        type: datetime
+      action:
+        type: string
+      changedBy:
+        type: string

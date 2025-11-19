@@ -1,0 +1,273 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports:
+  common: common.yml
+
+service:
+  base-path: /customer
+  auth: true
+
+  endpoints:
+    list:
+      display-name: List Customers
+      method: GET
+      path: ""
+      request:
+        name: ListCustomerRequest
+        query-parameters:
+          limit:
+            type: optional<integer>
+          offset:
+            type: optional<integer>
+          sortBy:
+            type: optional<string>
+          order:
+            type: optional<common.SortOrder>
+      response: list<Customer>
+
+    create:
+      display-name: Create Customer
+      method: POST
+      path: ""
+      request: CreateCustomerRequest
+      response: Customer
+
+    get:
+      display-name: Get Customer by ID
+      method: GET
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      response: Customer
+
+    update:
+      display-name: Update Customer
+      method: PUT
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: UpdateCustomerRequest
+      response: Customer
+
+    delete:
+      display-name: Delete Customer
+      method: DELETE
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+
+    patch:
+      display-name: Patch Customer
+      method: PATCH
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: PatchCustomerRequest
+      response: Customer
+
+    search:
+      display-name: Search Customers
+      method: POST
+      path: /search
+      request: SearchCustomerRequest
+      response: SearchCustomerResponse
+
+    count:
+      display-name: Count Customers
+      method: GET
+      path: /count
+      response: integer
+
+    bulkCreate:
+      display-name: Bulk Create Customers
+      method: POST
+      path: /bulk
+      request: list<CreateCustomerRequest>
+      response: list<Customer>
+
+    bulkUpdate:
+      display-name: Bulk Update Customers
+      method: PUT
+      path: /bulk
+      request: list<UpdateCustomerRequest>
+      response: list<Customer>
+
+    bulkDelete:
+      display-name: Bulk Delete Customers
+      method: DELETE
+      path: /bulk
+      request:
+        name: BulkDeleteCustomerRequest
+        body:
+          properties:
+            ids:
+              type: list<string>
+
+    export:
+      display-name: Export Customers
+      method: POST
+      path: /export
+      request:
+        name: ExportCustomerRequest
+        body:
+          properties:
+            format:
+              type: string
+
+    importData:
+      display-name: Import Customers
+      method: POST
+      path: /import
+      request:
+        name: ImportCustomerRequest
+        body:
+          properties:
+            format:
+              type: string
+            data:
+              type: string
+
+    validate:
+      display-name: Validate Customer
+      method: POST
+      path: /validate
+      request: CreateCustomerRequest
+      response: boolean
+
+    duplicate:
+      display-name: Duplicate Customer
+      method: POST
+      path: /{id}/duplicate
+      path-parameters:
+        id:
+          type: string
+      response: Customer
+
+    archive:
+      display-name: Archive Customer
+      method: POST
+      path: /{id}/archive
+      path-parameters:
+        id:
+          type: string
+      response: Customer
+
+    restore:
+      display-name: Restore Customer
+      method: POST
+      path: /{id}/restore
+      path-parameters:
+        id:
+          type: string
+      response: Customer
+
+    getHistory:
+      display-name: Get Customer History
+      method: GET
+      path: /{id}/history
+      path-parameters:
+        id:
+          type: string
+      response: list<CustomerHistoryEntry>
+
+    getMetadata:
+      display-name: Get Customer Metadata
+      method: GET
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      response: map<string, string>
+
+    updateMetadata:
+      display-name: Update Customer Metadata
+      method: PUT
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      request:
+        name: UpdateCustomerMetadataRequest
+        body:
+          properties:
+            metadata:
+              type: map<string, string>
+
+types:
+  CustomerStatus:
+    enum:
+      - active
+      - inactive
+      - pending
+      - archived
+
+  Customer:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: CustomerStatus
+      createdAt:
+        type: datetime
+      updatedAt:
+        type: datetime
+
+  CreateCustomerRequest:
+    properties:
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: optional<CustomerStatus>
+
+  UpdateCustomerRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<CustomerStatus>
+
+  PatchCustomerRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<CustomerStatus>
+
+  SearchCustomerRequest:
+    properties:
+      query:
+        type: optional<string>
+      limit:
+        type: optional<integer>
+      offset:
+        type: optional<integer>
+
+  SearchCustomerResponse:
+    properties:
+      results:
+        type: list<Customer>
+      total:
+        type: integer
+
+  CustomerHistoryEntry:
+    properties:
+      timestamp:
+        type: datetime
+      action:
+        type: string
+      changedBy:
+        type: string

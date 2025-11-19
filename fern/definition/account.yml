@@ -1,0 +1,273 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports:
+  common: common.yml
+
+service:
+  base-path: /account
+  auth: true
+
+  endpoints:
+    list:
+      display-name: List Accounts
+      method: GET
+      path: ""
+      request:
+        name: ListAccountRequest
+        query-parameters:
+          limit:
+            type: optional<integer>
+          offset:
+            type: optional<integer>
+          sortBy:
+            type: optional<string>
+          order:
+            type: optional<common.SortOrder>
+      response: list<Account>
+
+    create:
+      display-name: Create Account
+      method: POST
+      path: ""
+      request: CreateAccountRequest
+      response: Account
+
+    get:
+      display-name: Get Account by ID
+      method: GET
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      response: Account
+
+    update:
+      display-name: Update Account
+      method: PUT
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: UpdateAccountRequest
+      response: Account
+
+    delete:
+      display-name: Delete Account
+      method: DELETE
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+
+    patch:
+      display-name: Patch Account
+      method: PATCH
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: PatchAccountRequest
+      response: Account
+
+    search:
+      display-name: Search Accounts
+      method: POST
+      path: /search
+      request: SearchAccountRequest
+      response: SearchAccountResponse
+
+    count:
+      display-name: Count Accounts
+      method: GET
+      path: /count
+      response: integer
+
+    bulkCreate:
+      display-name: Bulk Create Accounts
+      method: POST
+      path: /bulk
+      request: list<CreateAccountRequest>
+      response: list<Account>
+
+    bulkUpdate:
+      display-name: Bulk Update Accounts
+      method: PUT
+      path: /bulk
+      request: list<UpdateAccountRequest>
+      response: list<Account>
+
+    bulkDelete:
+      display-name: Bulk Delete Accounts
+      method: DELETE
+      path: /bulk
+      request:
+        name: BulkDeleteAccountRequest
+        body:
+          properties:
+            ids:
+              type: list<string>
+
+    export:
+      display-name: Export Accounts
+      method: POST
+      path: /export
+      request:
+        name: ExportAccountRequest
+        body:
+          properties:
+            format:
+              type: string
+
+    importData:
+      display-name: Import Accounts
+      method: POST
+      path: /import
+      request:
+        name: ImportAccountRequest
+        body:
+          properties:
+            format:
+              type: string
+            data:
+              type: string
+
+    validate:
+      display-name: Validate Account
+      method: POST
+      path: /validate
+      request: CreateAccountRequest
+      response: boolean
+
+    duplicate:
+      display-name: Duplicate Account
+      method: POST
+      path: /{id}/duplicate
+      path-parameters:
+        id:
+          type: string
+      response: Account
+
+    archive:
+      display-name: Archive Account
+      method: POST
+      path: /{id}/archive
+      path-parameters:
+        id:
+          type: string
+      response: Account
+
+    restore:
+      display-name: Restore Account
+      method: POST
+      path: /{id}/restore
+      path-parameters:
+        id:
+          type: string
+      response: Account
+
+    getHistory:
+      display-name: Get Account History
+      method: GET
+      path: /{id}/history
+      path-parameters:
+        id:
+          type: string
+      response: list<AccountHistoryEntry>
+
+    getMetadata:
+      display-name: Get Account Metadata
+      method: GET
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      response: map<string, string>
+
+    updateMetadata:
+      display-name: Update Account Metadata
+      method: PUT
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      request:
+        name: UpdateAccountMetadataRequest
+        body:
+          properties:
+            metadata:
+              type: map<string, string>
+
+types:
+  AccountStatus:
+    enum:
+      - active
+      - inactive
+      - pending
+      - archived
+
+  Account:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: AccountStatus
+      createdAt:
+        type: datetime
+      updatedAt:
+        type: datetime
+
+  CreateAccountRequest:
+    properties:
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: optional<AccountStatus>
+
+  UpdateAccountRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<AccountStatus>
+
+  PatchAccountRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<AccountStatus>
+
+  SearchAccountRequest:
+    properties:
+      query:
+        type: optional<string>
+      limit:
+        type: optional<integer>
+      offset:
+        type: optional<integer>
+
+  SearchAccountResponse:
+    properties:
+      results:
+        type: list<Account>
+      total:
+        type: integer
+
+  AccountHistoryEntry:
+    properties:
+      timestamp:
+        type: datetime
+      action:
+        type: string
+      changedBy:
+        type: string

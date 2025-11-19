@@ -18,11 +18,27 @@ jobs:
         env:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
         run: |
-          OUTPUT=$(fern generate --docs --preview 2>&1) || true
-          echo "$OUTPUT"
-          URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()')
-          echo "Preview URL: $URL"
-          echo "🌿 Preview your docs: $URL" > preview_url.txt
+          set +e
+          if [ -z "$FERN_TOKEN" ]; then
+            echo "⚠️ FERN_TOKEN not configured. Running fern check only..."
+            fern check
+            echo "✅ Fern check passed. Preview unavailable: FERN_TOKEN not configured in repository secrets." > preview_url.txt
+          else
+            OUTPUT=$(fern generate --docs --preview 2>&1)
+            EXIT_CODE=$?
+            echo "$OUTPUT"
+            if [ $EXIT_CODE -eq 0 ]; then
+              URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()' || echo "")
+              if [ -n "$URL" ]; then
+                echo "🌿 Preview your docs: $URL" > preview_url.txt
+              else
+                echo "⚠️ Preview generation completed but URL not found in output." > preview_url.txt
+              fi
+            else
+              echo "❌ Preview generation failed. Check logs above for details." > preview_url.txt
+            fi
+          fi
+          set -e
 
       - name: Comment URL in PR
         uses: thollander/actions-comment-pull-request@v2.4.3

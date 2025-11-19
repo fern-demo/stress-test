@@ -1,0 +1,273 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports:
+  common: common.yml
+
+service:
+  base-path: /team
+  auth: true
+
+  endpoints:
+    list:
+      display-name: List Teams
+      method: GET
+      path: ""
+      request:
+        name: ListTeamRequest
+        query-parameters:
+          limit:
+            type: optional<integer>
+          offset:
+            type: optional<integer>
+          sortBy:
+            type: optional<string>
+          order:
+            type: optional<common.SortOrder>
+      response: list<Team>
+
+    create:
+      display-name: Create Team
+      method: POST
+      path: ""
+      request: CreateTeamRequest
+      response: Team
+
+    get:
+      display-name: Get Team by ID
+      method: GET
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      response: Team
+
+    update:
+      display-name: Update Team
+      method: PUT
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: UpdateTeamRequest
+      response: Team
+
+    delete:
+      display-name: Delete Team
+      method: DELETE
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+
+    patch:
+      display-name: Patch Team
+      method: PATCH
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: PatchTeamRequest
+      response: Team
+
+    search:
+      display-name: Search Teams
+      method: POST
+      path: /search
+      request: SearchTeamRequest
+      response: SearchTeamResponse
+
+    count:
+      display-name: Count Teams
+      method: GET
+      path: /count
+      response: integer
+
+    bulkCreate:
+      display-name: Bulk Create Teams
+      method: POST
+      path: /bulk
+      request: list<CreateTeamRequest>
+      response: list<Team>
+
+    bulkUpdate:
+      display-name: Bulk Update Teams
+      method: PUT
+      path: /bulk
+      request: list<UpdateTeamRequest>
+      response: list<Team>
+
+    bulkDelete:
+      display-name: Bulk Delete Teams
+      method: DELETE
+      path: /bulk
+      request:
+        name: BulkDeleteTeamRequest
+        body:
+          properties:
+            ids:
+              type: list<string>
+
+    export:
+      display-name: Export Teams
+      method: POST
+      path: /export
+      request:
+        name: ExportTeamRequest
+        body:
+          properties:
+            format:
+              type: string
+
+    importData:
+      display-name: Import Teams
+      method: POST
+      path: /import
+      request:
+        name: ImportTeamRequest
+        body:
+          properties:
+            format:
+              type: string
+            data:
+              type: string
+
+    validate:
+      display-name: Validate Team
+      method: POST
+      path: /validate
+      request: CreateTeamRequest
+      response: boolean
+
+    duplicate:
+      display-name: Duplicate Team
+      method: POST
+      path: /{id}/duplicate
+      path-parameters:
+        id:
+          type: string
+      response: Team
+
+    archive:
+      display-name: Archive Team
+      method: POST
+      path: /{id}/archive
+      path-parameters:
+        id:
+          type: string
+      response: Team
+
+    restore:
+      display-name: Restore Team
+      method: POST
+      path: /{id}/restore
+      path-parameters:
+        id:
+          type: string
+      response: Team
+
+    getHistory:
+      display-name: Get Team History
+      method: GET
+      path: /{id}/history
+      path-parameters:
+        id:
+          type: string
+      response: list<TeamHistoryEntry>
+
+    getMetadata:
+      display-name: Get Team Metadata
+      method: GET
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      response: map<string, string>
+
+    updateMetadata:
+      display-name: Update Team Metadata
+      method: PUT
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      request:
+        name: UpdateTeamMetadataRequest
+        body:
+          properties:
+            metadata:
+              type: map<string, string>
+
+types:
+  TeamStatus:
+    enum:
+      - active
+      - inactive
+      - pending
+      - archived
+
+  Team:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: TeamStatus
+      createdAt:
+        type: datetime
+      updatedAt:
+        type: datetime
+
+  CreateTeamRequest:
+    properties:
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: optional<TeamStatus>
+
+  UpdateTeamRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<TeamStatus>
+
+  PatchTeamRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<TeamStatus>
+
+  SearchTeamRequest:
+    properties:
+      query:
+        type: optional<string>
+      limit:
+        type: optional<integer>
+      offset:
+        type: optional<integer>
+
+  SearchTeamResponse:
+    properties:
+      results:
+        type: list<Team>
+      total:
+        type: integer
+
+  TeamHistoryEntry:
+    properties:
+      timestamp:
+        type: datetime
+      action:
+        type: string
+      changedBy:
+        type: string

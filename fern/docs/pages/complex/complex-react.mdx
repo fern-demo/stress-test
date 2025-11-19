@@ -1,0 +1,311 @@
+# Complex React Components Page
+
+This page contains complex custom React components to stress test Fern docs rendering.
+
+## Custom Component Examples
+
+<Callout intent="info">
+This is a callout component with info intent.
+</Callout>
+
+<Callout intent="warning">
+This is a callout component with warning intent.
+</Callout>
+
+<Callout intent="error">
+This is a callout component with error intent.
+</Callout>
+
+<Callout intent="success">
+This is a callout component with success intent.
+</Callout>
+
+## Nested Components
+
+<Tabs>
+  <Tab title="Tab 1">
+    <Callout intent="info">
+      This is a nested callout inside a tab.
+      
+      <CodeBlock title="example.py">
+      ```python
+      def nested_function():
+          return "This is nested code"
+      ```
+      </CodeBlock>
+    </Callout>
+  </Tab>
+  <Tab title="Tab 2">
+    <Accordion title="Nested Accordion">
+      This is an accordion nested inside a tab.
+      
+      <Callout intent="warning">
+        And a callout inside the accordion!
+      </Callout>
+    </Accordion>
+  </Tab>
+  <Tab title="Tab 3">
+    <Steps>
+      <Step title="Step 1">
+        First step in the nested steps component.
+      </Step>
+      <Step title="Step 2">
+        Second step in the nested steps component.
+      </Step>
+      <Step title="Step 3">
+        Third step in the nested steps component.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Multiple Accordions
+
+<Accordion title="Accordion 1">
+This is the first accordion with some content.
+
+```javascript
+const example = "code in accordion";
+console.log(example);
+```
+</Accordion>
+
+<Accordion title="Accordion 2">
+This is the second accordion with more content.
+
+<Callout intent="info">
+Nested callout in accordion 2
+</Callout>
+</Accordion>
+
+<Accordion title="Accordion 3">
+This is the third accordion.
+
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Data 1   | Data 2   | Data 3   |
+| Data 4   | Data 5   | Data 6   |
+</Accordion>
+
+## Code Blocks with Tabs
+
+<CodeBlocks>
+  <CodeBlock title="Python">
+  ```python
+  def hello_world():
+      print("Hello, World!")
+      return True
+  ```
+  </CodeBlock>
+  
+  <CodeBlock title="JavaScript">
+  ```javascript
+  function helloWorld() {
+      console.log("Hello, World!");
+      return true;
+  }
+  ```
+  </CodeBlock>
+  
+  <CodeBlock title="TypeScript">
+  ```typescript
+  function helloWorld(): boolean {
+      console.log("Hello, World!");
+      return true;
+  }
+  ```
+  </CodeBlock>
+  
+  <CodeBlock title="Java">
+  ```java
+  public class HelloWorld {
+      public static void main(String[] args) {
+          System.out.println("Hello, World!");
+      }
+  }
+  ```
+  </CodeBlock>
+</CodeBlocks>
+
+## Cards
+
+<Cards>
+  <Card title="Card 1" icon="star">
+    This is the first card with an icon.
+  </Card>
+  
+  <Card title="Card 2" icon="heart">
+    This is the second card with a different icon.
+  </Card>
+  
+  <Card title="Card 3" icon="rocket">
+    This is the third card with yet another icon.
+  </Card>
+</Cards>
+
+## Deeply Nested Components
+
+<Accordion title="Complex Nested Structure">
+  <Tabs>
+    <Tab title="Nested Tab 1">
+      <Callout intent="info">
+        <Accordion title="Even Deeper">
+          This is getting very nested now!
+          
+          <CodeBlock title="deep.py">
+          ```python
+          def deeply_nested():
+              return "So deep!"
+          ```
+          </CodeBlock>
+        </Accordion>
+      </Callout>
+    </Tab>
+    <Tab title="Nested Tab 2">
+      <Steps>
+        <Step title="Nested Step 1">
+          <Callout intent="success">
+            Success in a nested step!
+          </Callout>
+        </Step>
+        <Step title="Nested Step 2">
+          <Callout intent="warning">
+            Warning in a nested step!
+          </Callout>
+        </Step>
+      </Steps>
+    </Tab>
+  </Tabs>
+</Accordion>
+
+## Multiple Steps Components
+
+<Steps>
+  <Step title="Installation">
+    Install the package using npm:
+    
+    ```bash
+    npm install fern-api
+    ```
+  </Step>
+  
+  <Step title="Configuration">
+    Configure your project:
+    
+    ```yaml
+    organization: MyOrg
+    version: 1.0.0
+    ```
+  </Step>
+  
+  <Step title="Usage">
+    Use the CLI:
+    
+    ```bash
+    fern generate --docs
+    ```
+  </Step>
+  
+  <Step title="Deployment">
+    Deploy your documentation:
+    
+    <Callout intent="success">
+      Your docs are now live!
+    </Callout>
+  </Step>
+</Steps>
+
+## More Complex Nesting
+
+<Tabs>
+  <Tab title="Complex 1">
+    <Accordion title="Level 1">
+      <Tabs>
+        <Tab title="Level 2 Tab 1">
+          <Callout intent="info">
+            <Accordion title="Level 3">
+              <Steps>
+                <Step title="Deep Step 1">
+                  Content at level 4
+                </Step>
+                <Step title="Deep Step 2">
+                  More content at level 4
+                </Step>
+              </Steps>
+            </Accordion>
+          </Callout>
+        </Tab>
+        <Tab title="Level 2 Tab 2">
+          <CodeBlock title="nested.js">
+          ```javascript
+          const nested = {
+            level: 3,
+            content: "deeply nested"
+          };
+          ```
+          </CodeBlock>
+        </Tab>
+      </Tabs>
+    </Accordion>
+  </Tab>
+  <Tab title="Complex 2">
+    <Cards>
+      <Card title="Nested Card 1">
+        <Callout intent="warning">
+          Warning in a card!
+        </Callout>
+      </Card>
+      <Card title="Nested Card 2">
+        <Accordion title="Accordion in Card">
+          This is an accordion inside a card inside a tab!
+        </Accordion>
+      </Card>
+    </Cards>
+  </Tab>
+</Tabs>
+
+## Repeated Complex Structures
+
+<Accordion title="Repeat 1">
+  <Tabs>
+    <Tab title="A"><Callout intent="info">Info A</Callout></Tab>
+    <Tab title="B"><Callout intent="warning">Warning B</Callout></Tab>
+    <Tab title="C"><Callout intent="error">Error C</Callout></Tab>
+  </Tabs>
+</Accordion>
+
+<Accordion title="Repeat 2">
+  <Tabs>
+    <Tab title="A"><Callout intent="info">Info A</Callout></Tab>
+    <Tab title="B"><Callout intent="warning">Warning B</Callout></Tab>
+    <Tab title="C"><Callout intent="error">Error C</Callout></Tab>
+  </Tabs>
+</Accordion>
+
+<Accordion title="Repeat 3">
+  <Tabs>
+    <Tab title="A"><Callout intent="info">Info A</Callout></Tab>
+    <Tab title="B"><Callout intent="warning">Warning B</Callout></Tab>
+    <Tab title="C"><Callout intent="error">Error C</Callout></Tab>
+  </Tabs>
+</Accordion>
+
+<Accordion title="Repeat 4">
+  <Tabs>
+    <Tab title="A"><Callout intent="info">Info A</Callout></Tab>
+    <Tab title="B"><Callout intent="warning">Warning B</Callout></Tab>
+    <Tab title="C"><Callout intent="error">Error C</Callout></Tab>
+  </Tabs>
+</Accordion>
+
+<Accordion title="Repeat 5">
+  <Tabs>
+    <Tab title="A"><Callout intent="info">Info A</Callout></Tab>
+    <Tab title="B"><Callout intent="warning">Warning B</Callout></Tab>
+    <Tab title="C"><Callout intent="error">Error C</Callout></Tab>
+  </Tabs>
+</Accordion>
+
+## End of Complex React Components
+
+This page demonstrates various complex React component combinations to stress test Fern docs.
