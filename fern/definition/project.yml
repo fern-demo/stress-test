@@ -1,0 +1,273 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports:
+  common: common.yml
+
+service:
+  base-path: /project
+  auth: true
+
+  endpoints:
+    list:
+      display-name: List Projects
+      method: GET
+      path: ""
+      request:
+        name: ListProjectRequest
+        query-parameters:
+          limit:
+            type: optional<integer>
+          offset:
+            type: optional<integer>
+          sortBy:
+            type: optional<string>
+          order:
+            type: optional<common.SortOrder>
+      response: list<Project>
+
+    create:
+      display-name: Create Project
+      method: POST
+      path: ""
+      request: CreateProjectRequest
+      response: Project
+
+    get:
+      display-name: Get Project by ID
+      method: GET
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      response: Project
+
+    update:
+      display-name: Update Project
+      method: PUT
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: UpdateProjectRequest
+      response: Project
+
+    delete:
+      display-name: Delete Project
+      method: DELETE
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+
+    patch:
+      display-name: Patch Project
+      method: PATCH
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: PatchProjectRequest
+      response: Project
+
+    search:
+      display-name: Search Projects
+      method: POST
+      path: /search
+      request: SearchProjectRequest
+      response: SearchProjectResponse
+
+    count:
+      display-name: Count Projects
+      method: GET
+      path: /count
+      response: integer
+
+    bulkCreate:
+      display-name: Bulk Create Projects
+      method: POST
+      path: /bulk
+      request: list<CreateProjectRequest>
+      response: list<Project>
+
+    bulkUpdate:
+      display-name: Bulk Update Projects
+      method: PUT
+      path: /bulk
+      request: list<UpdateProjectRequest>
+      response: list<Project>
+
+    bulkDelete:
+      display-name: Bulk Delete Projects
+      method: DELETE
+      path: /bulk
+      request:
+        name: BulkDeleteProjectRequest
+        body:
+          properties:
+            ids:
+              type: list<string>
+
+    export:
+      display-name: Export Projects
+      method: POST
+      path: /export
+      request:
+        name: ExportProjectRequest
+        body:
+          properties:
+            format:
+              type: string
+
+    importData:
+      display-name: Import Projects
+      method: POST
+      path: /import
+      request:
+        name: ImportProjectRequest
+        body:
+          properties:
+            format:
+              type: string
+            data:
+              type: string
+
+    validate:
+      display-name: Validate Project
+      method: POST
+      path: /validate
+      request: CreateProjectRequest
+      response: boolean
+
+    duplicate:
+      display-name: Duplicate Project
+      method: POST
+      path: /{id}/duplicate
+      path-parameters:
+        id:
+          type: string
+      response: Project
+
+    archive:
+      display-name: Archive Project
+      method: POST
+      path: /{id}/archive
+      path-parameters:
+        id:
+          type: string
+      response: Project
+
+    restore:
+      display-name: Restore Project
+      method: POST
+      path: /{id}/restore
+      path-parameters:
+        id:
+          type: string
+      response: Project
+
+    getHistory:
+      display-name: Get Project History
+      method: GET
+      path: /{id}/history
+      path-parameters:
+        id:
+          type: string
+      response: list<ProjectHistoryEntry>
+
+    getMetadata:
+      display-name: Get Project Metadata
+      method: GET
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      response: map<string, string>
+
+    updateMetadata:
+      display-name: Update Project Metadata
+      method: PUT
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      request:
+        name: UpdateProjectMetadataRequest
+        body:
+          properties:
+            metadata:
+              type: map<string, string>
+
+types:
+  ProjectStatus:
+    enum:
+      - active
+      - inactive
+      - pending
+      - archived
+
+  Project:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: ProjectStatus
+      createdAt:
+        type: datetime
+      updatedAt:
+        type: datetime
+
+  CreateProjectRequest:
+    properties:
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: optional<ProjectStatus>
+
+  UpdateProjectRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<ProjectStatus>
+
+  PatchProjectRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<ProjectStatus>
+
+  SearchProjectRequest:
+    properties:
+      query:
+        type: optional<string>
+      limit:
+        type: optional<integer>
+      offset:
+        type: optional<integer>
+
+  SearchProjectResponse:
+    properties:
+      results:
+        type: list<Project>
+      total:
+        type: integer
+
+  ProjectHistoryEntry:
+    properties:
+      timestamp:
+        type: datetime
+      action:
+        type: string
+      changedBy:
+        type: string

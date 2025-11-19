@@ -1,0 +1,273 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports:
+  common: common.yml
+
+service:
+  base-path: /payment
+  auth: true
+
+  endpoints:
+    list:
+      display-name: List Payments
+      method: GET
+      path: ""
+      request:
+        name: ListPaymentRequest
+        query-parameters:
+          limit:
+            type: optional<integer>
+          offset:
+            type: optional<integer>
+          sortBy:
+            type: optional<string>
+          order:
+            type: optional<common.SortOrder>
+      response: list<Payment>
+
+    create:
+      display-name: Create Payment
+      method: POST
+      path: ""
+      request: CreatePaymentRequest
+      response: Payment
+
+    get:
+      display-name: Get Payment by ID
+      method: GET
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      response: Payment
+
+    update:
+      display-name: Update Payment
+      method: PUT
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: UpdatePaymentRequest
+      response: Payment
+
+    delete:
+      display-name: Delete Payment
+      method: DELETE
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+
+    patch:
+      display-name: Patch Payment
+      method: PATCH
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: PatchPaymentRequest
+      response: Payment
+
+    search:
+      display-name: Search Payments
+      method: POST
+      path: /search
+      request: SearchPaymentRequest
+      response: SearchPaymentResponse
+
+    count:
+      display-name: Count Payments
+      method: GET
+      path: /count
+      response: integer
+
+    bulkCreate:
+      display-name: Bulk Create Payments
+      method: POST
+      path: /bulk
+      request: list<CreatePaymentRequest>
+      response: list<Payment>
+
+    bulkUpdate:
+      display-name: Bulk Update Payments
+      method: PUT
+      path: /bulk
+      request: list<UpdatePaymentRequest>
+      response: list<Payment>
+
+    bulkDelete:
+      display-name: Bulk Delete Payments
+      method: DELETE
+      path: /bulk
+      request:
+        name: BulkDeletePaymentRequest
+        body:
+          properties:
+            ids:
+              type: list<string>
+
+    export:
+      display-name: Export Payments
+      method: POST
+      path: /export
+      request:
+        name: ExportPaymentRequest
+        body:
+          properties:
+            format:
+              type: string
+
+    importData:
+      display-name: Import Payments
+      method: POST
+      path: /import
+      request:
+        name: ImportPaymentRequest
+        body:
+          properties:
+            format:
+              type: string
+            data:
+              type: string
+
+    validate:
+      display-name: Validate Payment
+      method: POST
+      path: /validate
+      request: CreatePaymentRequest
+      response: boolean
+
+    duplicate:
+      display-name: Duplicate Payment
+      method: POST
+      path: /{id}/duplicate
+      path-parameters:
+        id:
+          type: string
+      response: Payment
+
+    archive:
+      display-name: Archive Payment
+      method: POST
+      path: /{id}/archive
+      path-parameters:
+        id:
+          type: string
+      response: Payment
+
+    restore:
+      display-name: Restore Payment
+      method: POST
+      path: /{id}/restore
+      path-parameters:
+        id:
+          type: string
+      response: Payment
+
+    getHistory:
+      display-name: Get Payment History
+      method: GET
+      path: /{id}/history
+      path-parameters:
+        id:
+          type: string
+      response: list<PaymentHistoryEntry>
+
+    getMetadata:
+      display-name: Get Payment Metadata
+      method: GET
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      response: map<string, string>
+
+    updateMetadata:
+      display-name: Update Payment Metadata
+      method: PUT
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      request:
+        name: UpdatePaymentMetadataRequest
+        body:
+          properties:
+            metadata:
+              type: map<string, string>
+
+types:
+  PaymentStatus:
+    enum:
+      - active
+      - inactive
+      - pending
+      - archived
+
+  Payment:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: PaymentStatus
+      createdAt:
+        type: datetime
+      updatedAt:
+        type: datetime
+
+  CreatePaymentRequest:
+    properties:
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: optional<PaymentStatus>
+
+  UpdatePaymentRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<PaymentStatus>
+
+  PatchPaymentRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<PaymentStatus>
+
+  SearchPaymentRequest:
+    properties:
+      query:
+        type: optional<string>
+      limit:
+        type: optional<integer>
+      offset:
+        type: optional<integer>
+
+  SearchPaymentResponse:
+    properties:
+      results:
+        type: list<Payment>
+      total:
+        type: integer
+
+  PaymentHistoryEntry:
+    properties:
+      timestamp:
+        type: datetime
+      action:
+        type: string
+      changedBy:
+        type: string

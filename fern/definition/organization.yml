@@ -1,0 +1,273 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports:
+  common: common.yml
+
+service:
+  base-path: /organization
+  auth: true
+
+  endpoints:
+    list:
+      display-name: List Organizations
+      method: GET
+      path: ""
+      request:
+        name: ListOrganizationRequest
+        query-parameters:
+          limit:
+            type: optional<integer>
+          offset:
+            type: optional<integer>
+          sortBy:
+            type: optional<string>
+          order:
+            type: optional<common.SortOrder>
+      response: list<Organization>
+
+    create:
+      display-name: Create Organization
+      method: POST
+      path: ""
+      request: CreateOrganizationRequest
+      response: Organization
+
+    get:
+      display-name: Get Organization by ID
+      method: GET
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      response: Organization
+
+    update:
+      display-name: Update Organization
+      method: PUT
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: UpdateOrganizationRequest
+      response: Organization
+
+    delete:
+      display-name: Delete Organization
+      method: DELETE
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+
+    patch:
+      display-name: Patch Organization
+      method: PATCH
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: PatchOrganizationRequest
+      response: Organization
+
+    search:
+      display-name: Search Organizations
+      method: POST
+      path: /search
+      request: SearchOrganizationRequest
+      response: SearchOrganizationResponse
+
+    count:
+      display-name: Count Organizations
+      method: GET
+      path: /count
+      response: integer
+
+    bulkCreate:
+      display-name: Bulk Create Organizations
+      method: POST
+      path: /bulk
+      request: list<CreateOrganizationRequest>
+      response: list<Organization>
+
+    bulkUpdate:
+      display-name: Bulk Update Organizations
+      method: PUT
+      path: /bulk
+      request: list<UpdateOrganizationRequest>
+      response: list<Organization>
+
+    bulkDelete:
+      display-name: Bulk Delete Organizations
+      method: DELETE
+      path: /bulk
+      request:
+        name: BulkDeleteOrganizationRequest
+        body:
+          properties:
+            ids:
+              type: list<string>
+
+    export:
+      display-name: Export Organizations
+      method: POST
+      path: /export
+      request:
+        name: ExportOrganizationRequest
+        body:
+          properties:
+            format:
+              type: string
+
+    importData:
+      display-name: Import Organizations
+      method: POST
+      path: /import
+      request:
+        name: ImportOrganizationRequest
+        body:
+          properties:
+            format:
+              type: string
+            data:
+              type: string
+
+    validate:
+      display-name: Validate Organization
+      method: POST
+      path: /validate
+      request: CreateOrganizationRequest
+      response: boolean
+
+    duplicate:
+      display-name: Duplicate Organization
+      method: POST
+      path: /{id}/duplicate
+      path-parameters:
+        id:
+          type: string
+      response: Organization
+
+    archive:
+      display-name: Archive Organization
+      method: POST
+      path: /{id}/archive
+      path-parameters:
+        id:
+          type: string
+      response: Organization
+
+    restore:
+      display-name: Restore Organization
+      method: POST
+      path: /{id}/restore
+      path-parameters:
+        id:
+          type: string
+      response: Organization
+
+    getHistory:
+      display-name: Get Organization History
+      method: GET
+      path: /{id}/history
+      path-parameters:
+        id:
+          type: string
+      response: list<OrganizationHistoryEntry>
+
+    getMetadata:
+      display-name: Get Organization Metadata
+      method: GET
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      response: map<string, string>
+
+    updateMetadata:
+      display-name: Update Organization Metadata
+      method: PUT
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      request:
+        name: UpdateOrganizationMetadataRequest
+        body:
+          properties:
+            metadata:
+              type: map<string, string>
+
+types:
+  OrganizationStatus:
+    enum:
+      - active
+      - inactive
+      - pending
+      - archived
+
+  Organization:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: OrganizationStatus
+      createdAt:
+        type: datetime
+      updatedAt:
+        type: datetime
+
+  CreateOrganizationRequest:
+    properties:
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: optional<OrganizationStatus>
+
+  UpdateOrganizationRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<OrganizationStatus>
+
+  PatchOrganizationRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<OrganizationStatus>
+
+  SearchOrganizationRequest:
+    properties:
+      query:
+        type: optional<string>
+      limit:
+        type: optional<integer>
+      offset:
+        type: optional<integer>
+
+  SearchOrganizationResponse:
+    properties:
+      results:
+        type: list<Organization>
+      total:
+        type: integer
+
+  OrganizationHistoryEntry:
+    properties:
+      timestamp:
+        type: datetime
+      action:
+        type: string
+      changedBy:
+        type: string

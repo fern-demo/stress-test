@@ -1,0 +1,547 @@
+# All Fern Components Showcase
+
+This page demonstrates every available Fern documentation component.
+
+## Text Formatting
+
+This is **bold text** and this is *italic text*. You can also use ***bold and italic*** together.
+
+Here's some `inline code` and a [link to Fern](https://buildwithfern.com).
+
+> This is a blockquote. It can contain multiple lines of text and is useful for highlighting important information or quotes.
+
+## Headings
+
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
+
+## Lists
+
+### Unordered List
+- Item 1
+- Item 2
+  - Nested item 2.1
+  - Nested item 2.2
+- Item 3
+
+### Ordered List
+1. First item
+2. Second item
+   1. Nested item 2.1
+   2. Nested item 2.2
+3. Third item
+
+### Task List
+- [x] Completed task
+- [ ] Incomplete task
+- [ ] Another incomplete task
+
+## Code Blocks
+
+### Basic Code Block
+
+```python
+def hello_world():
+    """A simple hello world function."""
+    print("Hello, World!")
+    return True
+```
+
+### Code Block with Title
+
+```javascript title="example.js"
+function calculateSum(a, b) {
+    return a + b;
+}
+
+console.log(calculateSum(5, 3));
+```
+
+### Code Block with Line Numbers
+
+```typescript
+interface User {
+    id: number;
+    name: string;
+    email: string;
+}
+
+function getUser(id: number): User {
+    return {
+        id: id,
+        name: "John Doe",
+        email: "john@example.com"
+    };
+}
+```
+
+### Multiple Language Code Blocks
+
+<CodeBlocks>
+  <CodeBlock title="Python">
+  ```python
+  def greet(name):
+      return f"Hello, {name}!"
+  ```
+  </CodeBlock>
+  
+  <CodeBlock title="JavaScript">
+  ```javascript
+  function greet(name) {
+      return `Hello, ${name}!`;
+  }
+  ```
+  </CodeBlock>
+  
+  <CodeBlock title="Go">
+  ```go
+  func greet(name string) string {
+      return fmt.Sprintf("Hello, %s!", name)
+  }
+  ```
+  </CodeBlock>
+  
+  <CodeBlock title="Ruby">
+  ```ruby
+  def greet(name)
+      "Hello, #{name}!"
+  end
+  ```
+  </CodeBlock>
+</CodeBlocks>
+
+## Callouts
+
+<Callout intent="info">
+This is an **info** callout. Use it to provide helpful information to your users.
+</Callout>
+
+<Callout intent="success">
+This is a **success** callout. Use it to highlight successful operations or positive outcomes.
+</Callout>
+
+<Callout intent="warning">
+This is a **warning** callout. Use it to alert users about potential issues or important considerations.
+</Callout>
+
+<Callout intent="error">
+This is an **error** callout. Use it to highlight errors or critical issues that need attention.
+</Callout>
+
+<Callout intent="note">
+This is a **note** callout. Use it for general notes or additional information.
+</Callout>
+
+## Tabs
+
+<Tabs>
+  <Tab title="Installation">
+    Install the package using your preferred package manager:
+    
+    ```bash
+    npm install fern-api
+    ```
+  </Tab>
+  
+  <Tab title="Configuration">
+    Create a configuration file:
+    
+    ```yaml
+    organization: MyOrg
+    version: 1.0.0
+    ```
+  </Tab>
+  
+  <Tab title="Usage">
+    Use the CLI to generate docs:
+    
+    ```bash
+    fern generate --docs
+    ```
+  </Tab>
+</Tabs>
+
+## Accordions
+
+<Accordion title="What is Fern?">
+Fern is a toolkit for building REST APIs. It includes tools for generating SDKs, documentation, and more.
+</Accordion>
+
+<Accordion title="How do I get started?">
+Getting started with Fern is easy:
+
+1. Install the Fern CLI
+2. Initialize your project
+3. Define your API
+4. Generate your docs
+
+```bash
+npm install -g fern-api
+fern init
+fern generate --docs
+```
+</Accordion>
+
+<Accordion title="What languages are supported?">
+Fern supports multiple programming languages including:
+- Python
+- TypeScript
+- JavaScript
+- Java
+- Go
+- Ruby
+- And more!
+</Accordion>
+
+## Steps
+
+<Steps>
+  <Step title="Create an account">
+    Sign up for a Fern account at [buildwithfern.com](https://buildwithfern.com).
+  </Step>
+  
+  <Step title="Install the CLI">
+    Install the Fern CLI globally:
+    
+    ```bash
+    npm install -g fern-api
+    ```
+  </Step>
+  
+  <Step title="Initialize your project">
+    Create a new Fern project:
+    
+    ```bash
+    fern init
+    ```
+  </Step>
+  
+  <Step title="Define your API">
+    Edit the API definition files in the `fern/` directory.
+  </Step>
+  
+  <Step title="Generate documentation">
+    Generate your documentation:
+    
+    ```bash
+    fern generate --docs
+    ```
+  </Step>
+</Steps>
+
+## Cards
+
+<Cards>
+  <Card title="Getting Started" icon="rocket" href="/docs/getting-started">
+    Learn the basics of Fern and get up and running quickly.
+  </Card>
+  
+  <Card title="API Reference" icon="book" href="/api-reference">
+    Explore the complete API reference documentation.
+  </Card>
+  
+  <Card title="SDKs" icon="code" href="/sdks">
+    Generate type-safe SDKs for your favorite programming languages.
+  </Card>
+  
+  <Card title="Examples" icon="star" href="/examples">
+    Browse example projects and code samples.
+  </Card>
+  
+  <Card title="Support" icon="help" href="/support">
+    Get help from our support team and community.
+  </Card>
+  
+  <Card title="Blog" icon="newspaper" href="/blog">
+    Read the latest news and updates from the Fern team.
+  </Card>
+</Cards>
+
+## Tables
+
+### Basic Table
+
+| Feature | Description | Status |
+|---------|-------------|--------|
+| API Docs | Generate beautiful API documentation | ✅ Available |
+| SDKs | Generate type-safe SDKs | ✅ Available |
+| OpenAPI | Import OpenAPI specifications | ✅ Available |
+| Webhooks | Document webhook events | ✅ Available |
+
+### Complex Table
+
+| Language | SDK Support | Code Generation | Documentation | Examples |
+|----------|-------------|-----------------|---------------|----------|
+| Python | ✅ Full | ✅ Yes | ✅ Yes | ✅ Yes |
+| TypeScript | ✅ Full | ✅ Yes | ✅ Yes | ✅ Yes |
+| JavaScript | ✅ Full | ✅ Yes | ✅ Yes | ✅ Yes |
+| Java | ✅ Full | ✅ Yes | ✅ Yes | ✅ Yes |
+| Go | ✅ Full | ✅ Yes | ✅ Yes | ✅ Yes |
+| Ruby | ⚠️ Beta | ✅ Yes | ✅ Yes | ⚠️ Limited |
+| PHP | 🚧 Coming Soon | ❌ No | ❌ No | ❌ No |
+
+## Images
+
+![Fern Logo](../../assets/fern-logo.png)
+
+## Horizontal Rule
+
+---
+
+## Nested Components Example 1
+
+<Tabs>
+  <Tab title="Quick Start">
+    <Steps>
+      <Step title="Install">
+        <CodeBlock title="install.sh">
+        ```bash
+        npm install -g fern-api
+        ```
+        </CodeBlock>
+      </Step>
+      <Step title="Configure">
+        <Callout intent="info">
+          Make sure to configure your organization name in `fern.config.json`.
+        </Callout>
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Advanced">
+    <Accordion title="Custom Configuration">
+      You can customize your Fern configuration with advanced options:
+      
+      ```yaml
+      organization: MyOrg
+      version: 2.0.0
+      custom:
+        theme: dark
+        analytics: true
+      ```
+    </Accordion>
+  </Tab>
+</Tabs>
+
+## Nested Components Example 2
+
+<Accordion title="API Authentication">
+  <Tabs>
+    <Tab title="Bearer Token">
+      <Callout intent="info">
+        Use Bearer token authentication for API requests.
+      </Callout>
+      
+      ```bash
+      curl -H "Authorization: Bearer YOUR_TOKEN" https://api.example.com
+      ```
+    </Tab>
+    <Tab title="API Key">
+      <Callout intent="warning">
+        Keep your API keys secure and never commit them to version control.
+      </Callout>
+      
+      ```bash
+      curl -H "X-API-Key: YOUR_API_KEY" https://api.example.com
+      ```
+    </Tab>
+  </Tabs>
+</Accordion>
+
+## Nested Components Example 3
+
+<Cards>
+  <Card title="Python SDK">
+    <Callout intent="success">
+      The Python SDK is production-ready!
+    </Callout>
+    
+    ```python
+    from fern import Client
+    
+    client = Client(api_key="your_key")
+    ```
+  </Card>
+  
+  <Card title="TypeScript SDK">
+    <Callout intent="success">
+      The TypeScript SDK is production-ready!
+    </Callout>
+    
+    ```typescript
+    import { Client } from '@fern/sdk';
+    
+    const client = new Client({ apiKey: 'your_key' });
+    ```
+  </Card>
+</Cards>
+
+## Complex Nested Structure
+
+<Accordion title="Complete Example">
+  <Tabs>
+    <Tab title="Setup">
+      <Steps>
+        <Step title="Prerequisites">
+          <Callout intent="info">
+            Ensure you have Node.js 18+ installed.
+          </Callout>
+        </Step>
+        <Step title="Installation">
+          <CodeBlocks>
+            <CodeBlock title="npm">
+            ```bash
+            npm install -g fern-api
+            ```
+            </CodeBlock>
+            <CodeBlock title="yarn">
+            ```bash
+            yarn global add fern-api
+            ```
+            </CodeBlock>
+            <CodeBlock title="pnpm">
+            ```bash
+            pnpm add -g fern-api
+            ```
+            </CodeBlock>
+          </CodeBlocks>
+        </Step>
+      </Steps>
+    </Tab>
+    <Tab title="Configuration">
+      <Accordion title="Basic Config">
+        ```json
+        {
+          "organization": "MyOrg",
+          "version": "1.0.0"
+        }
+        ```
+      </Accordion>
+      <Accordion title="Advanced Config">
+        ```json
+        {
+          "organization": "MyOrg",
+          "version": "2.0.0",
+          "features": {
+            "analytics": true,
+            "customDomain": "docs.example.com"
+          }
+        }
+        ```
+      </Accordion>
+    </Tab>
+  </Tabs>
+</Accordion>
+
+## Inline Components
+
+You can use inline components like <Callout intent="info">inline callouts</Callout> within text.
+
+## Multiple Callouts in Sequence
+
+<Callout intent="info">
+First callout with information.
+</Callout>
+
+<Callout intent="success">
+Second callout with success message.
+</Callout>
+
+<Callout intent="warning">
+Third callout with a warning.
+</Callout>
+
+<Callout intent="error">
+Fourth callout with an error.
+</Callout>
+
+## Multiple Accordions in Sequence
+
+<Accordion title="Accordion 1">
+Content for the first accordion.
+</Accordion>
+
+<Accordion title="Accordion 2">
+Content for the second accordion.
+</Accordion>
+
+<Accordion title="Accordion 3">
+Content for the third accordion.
+</Accordion>
+
+<Accordion title="Accordion 4">
+Content for the fourth accordion.
+</Accordion>
+
+<Accordion title="Accordion 5">
+Content for the fifth accordion.
+</Accordion>
+
+## Multiple Card Groups
+
+<Cards>
+  <Card title="Card A1" icon="star">
+    First card in first group.
+  </Card>
+  <Card title="Card A2" icon="heart">
+    Second card in first group.
+  </Card>
+</Cards>
+
+<Cards>
+  <Card title="Card B1" icon="rocket">
+    First card in second group.
+  </Card>
+  <Card title="Card B2" icon="code">
+    Second card in second group.
+  </Card>
+</Cards>
+
+## Deeply Nested Example
+
+<Accordion title="Level 1">
+  <Tabs>
+    <Tab title="Level 2A">
+      <Accordion title="Level 3">
+        <Callout intent="info">
+          <Steps>
+            <Step title="Level 4 Step 1">
+              <CodeBlock title="level4.py">
+              ```python
+              def level_4():
+                  return "Deep nesting!"
+              ```
+              </CodeBlock>
+            </Step>
+            <Step title="Level 4 Step 2">
+              <Tabs>
+                <Tab title="Level 5A">
+                  Content at level 5A
+                </Tab>
+                <Tab title="Level 5B">
+                  Content at level 5B
+                </Tab>
+              </Tabs>
+            </Step>
+          </Steps>
+        </Callout>
+      </Accordion>
+    </Tab>
+    <Tab title="Level 2B">
+      <Cards>
+        <Card title="Nested Card">
+          <Callout intent="success">
+            Success in a deeply nested card!
+          </Callout>
+        </Card>
+      </Cards>
+    </Tab>
+  </Tabs>
+</Accordion>
+
+## End of Components Showcase
+
+This page has demonstrated all available Fern documentation components including text formatting, code blocks, callouts, tabs, accordions, steps, cards, tables, and various nested combinations.

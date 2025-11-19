@@ -1,0 +1,273 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fern-api/fern/main/fern.schema.json
+
+imports:
+  common: common.yml
+
+service:
+  base-path: /invoice
+  auth: true
+
+  endpoints:
+    list:
+      display-name: List Invoices
+      method: GET
+      path: ""
+      request:
+        name: ListInvoiceRequest
+        query-parameters:
+          limit:
+            type: optional<integer>
+          offset:
+            type: optional<integer>
+          sortBy:
+            type: optional<string>
+          order:
+            type: optional<common.SortOrder>
+      response: list<Invoice>
+
+    create:
+      display-name: Create Invoice
+      method: POST
+      path: ""
+      request: CreateInvoiceRequest
+      response: Invoice
+
+    get:
+      display-name: Get Invoice by ID
+      method: GET
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      response: Invoice
+
+    update:
+      display-name: Update Invoice
+      method: PUT
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: UpdateInvoiceRequest
+      response: Invoice
+
+    delete:
+      display-name: Delete Invoice
+      method: DELETE
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+
+    patch:
+      display-name: Patch Invoice
+      method: PATCH
+      path: /{id}
+      path-parameters:
+        id:
+          type: string
+      request: PatchInvoiceRequest
+      response: Invoice
+
+    search:
+      display-name: Search Invoices
+      method: POST
+      path: /search
+      request: SearchInvoiceRequest
+      response: SearchInvoiceResponse
+
+    count:
+      display-name: Count Invoices
+      method: GET
+      path: /count
+      response: integer
+
+    bulkCreate:
+      display-name: Bulk Create Invoices
+      method: POST
+      path: /bulk
+      request: list<CreateInvoiceRequest>
+      response: list<Invoice>
+
+    bulkUpdate:
+      display-name: Bulk Update Invoices
+      method: PUT
+      path: /bulk
+      request: list<UpdateInvoiceRequest>
+      response: list<Invoice>
+
+    bulkDelete:
+      display-name: Bulk Delete Invoices
+      method: DELETE
+      path: /bulk
+      request:
+        name: BulkDeleteInvoiceRequest
+        body:
+          properties:
+            ids:
+              type: list<string>
+
+    export:
+      display-name: Export Invoices
+      method: POST
+      path: /export
+      request:
+        name: ExportInvoiceRequest
+        body:
+          properties:
+            format:
+              type: string
+
+    importData:
+      display-name: Import Invoices
+      method: POST
+      path: /import
+      request:
+        name: ImportInvoiceRequest
+        body:
+          properties:
+            format:
+              type: string
+            data:
+              type: string
+
+    validate:
+      display-name: Validate Invoice
+      method: POST
+      path: /validate
+      request: CreateInvoiceRequest
+      response: boolean
+
+    duplicate:
+      display-name: Duplicate Invoice
+      method: POST
+      path: /{id}/duplicate
+      path-parameters:
+        id:
+          type: string
+      response: Invoice
+
+    archive:
+      display-name: Archive Invoice
+      method: POST
+      path: /{id}/archive
+      path-parameters:
+        id:
+          type: string
+      response: Invoice
+
+    restore:
+      display-name: Restore Invoice
+      method: POST
+      path: /{id}/restore
+      path-parameters:
+        id:
+          type: string
+      response: Invoice
+
+    getHistory:
+      display-name: Get Invoice History
+      method: GET
+      path: /{id}/history
+      path-parameters:
+        id:
+          type: string
+      response: list<InvoiceHistoryEntry>
+
+    getMetadata:
+      display-name: Get Invoice Metadata
+      method: GET
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      response: map<string, string>
+
+    updateMetadata:
+      display-name: Update Invoice Metadata
+      method: PUT
+      path: /{id}/metadata
+      path-parameters:
+        id:
+          type: string
+      request:
+        name: UpdateInvoiceMetadataRequest
+        body:
+          properties:
+            metadata:
+              type: map<string, string>
+
+types:
+  InvoiceStatus:
+    enum:
+      - active
+      - inactive
+      - pending
+      - archived
+
+  Invoice:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: InvoiceStatus
+      createdAt:
+        type: datetime
+      updatedAt:
+        type: datetime
+
+  CreateInvoiceRequest:
+    properties:
+      name:
+        type: string
+      description:
+        type: optional<string>
+      status:
+        type: optional<InvoiceStatus>
+
+  UpdateInvoiceRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<InvoiceStatus>
+
+  PatchInvoiceRequest:
+    properties:
+      name:
+        type: optional<string>
+      description:
+        type: optional<string>
+      status:
+        type: optional<InvoiceStatus>
+
+  SearchInvoiceRequest:
+    properties:
+      query:
+        type: optional<string>
+      limit:
+        type: optional<integer>
+      offset:
+        type: optional<integer>
+
+  SearchInvoiceResponse:
+    properties:
+      results:
+        type: list<Invoice>
+      total:
+        type: integer
+
+  InvoiceHistoryEntry:
+    properties:
+      timestamp:
+        type: datetime
+      action:
+        type: string
+      changedBy:
+        type: string
