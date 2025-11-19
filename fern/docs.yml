@@ -1,5 +1,5 @@
 instances:
-  - url: petstore-ferndef.docs.buildwithfern.com
+  - url: stress-test-fern.docs.buildwithfern.com
 
 navigation:
   - section: Get started
