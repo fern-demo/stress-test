@@ -2042,3 +2042,6 @@ logo:
   height: 40
 
 favicon: ./docs/assets/favicon.png
+
+experimental:
+  dynamic-snippets: true
