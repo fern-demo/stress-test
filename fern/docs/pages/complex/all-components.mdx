@@ -87,6 +87,49 @@ function getUser(id: number): User {
 }
 ```
 
+### Code Groups
+<CodeGroup>
+  <Code
+    src="https://static.launchdarkly.com/app/s/ld/sdk-setup/react-native-client-sdk/install-yarn.txt"
+    title="yarn"
+    language="shell"
+    for="yarn"
+  />
+  <Code
+    src="https://static.launchdarkly.com/app/s/ld/sdk-setup/react-native-client-sdk/install-npm.txt"
+    title="npm"
+    language="shell"
+    for="npm"
+  />
+  <Code
+    src="https://static.launchdarkly.com/app/s/ld/sdk-setup/react-native-client-sdk/install-pnpm.txt"
+    title="pnpm"
+    language="shell"
+    for="pnpm"
+  />
+</CodeGroup>
+
+<CodeGroup>
+  <Code
+    src="https://static.launchdarkly.com/app/s/ld/sdk-setup/react-native-client-sdk/install-yarn-async-storage.txt"
+    title="yarn"
+    language="shell"
+    for="yarn"
+  />
+  <Code
+    src="https://static.launchdarkly.com/app/s/ld/sdk-setup/react-native-client-sdk/install-npm-async-storage.txt"
+    title="npm"
+    language="shell"
+    for="npm"
+  />
+  <Code
+    src="https://static.launchdarkly.com/app/s/ld/sdk-setup/react-native-client-sdk/install-pnpm-async-storage.txt"
+    title="pnpm"
+    language="shell"
+    for="pnpm"
+  />
+</CodeGroup>
+
 ### Multiple Language Code Blocks
 
 <CodeBlocks>
@@ -579,6 +622,76 @@ Content for the fifth accordion.
     </Tab>
   </Tabs>
 </Accordion>
+
+## Mermaid Diagrams
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Dev as Developer
+    participant CLI as Fern CLI
+    participant FDR as FDR Server
+    participant S3 as AWS S3
+    participant Redis as Redis Cache
+    participant Vercel as Vercel (Next.js)
+    participant KV as Vercel KV
+    participant FAI as FAI Service
+    participant Browser as End User Browser
+
+    rect
+        note over Dev,CLI: Publishing Phase
+        Dev->>CLI: fern docs publish
+        CLI->>CLI: Parse docs.yml & markdown
+        CLI->>CLI: Generate IR for APIs
+        CLI->>FDR: startDocsRegister
+        FDR->>S3: Get presigned upload URLs
+        FDR-->>CLI: Upload URLs + registration ID
+        CLI->>S3: Upload assets (images, files)
+        CLI->>FDR: finishDocsRegister (docs definition)
+    end
+
+    rect
+        note over FDR,FAI: Storage & Caching Phase
+        FDR->>FDR: Convert to DB format
+        FDR->>FDR: Store in PostgreSQL
+        FDR->>Redis: Cache docs definition (7-day TTL)
+        FDR->>S3: Write LoadDocsForUrlResponse
+        FDR->>Vercel: Trigger revalidation
+        Vercel->>KV: Clear domain cache
+        Vercel->>KV: Store new cache keys
+        Vercel->>FAI: Trigger reindex for AI search
+    end
+
+    rect
+        note over Browser,FAI: Rendering Phase
+        Browser->>Vercel: Request docs page
+        Vercel->>KV: Check Vercel KV cache
+        alt Cache Hit
+            KV-->>Vercel: Return cached data
+        else Cache Miss
+            Vercel->>FDR: getDocsForUrl
+            FDR->>Redis: Check Redis cache
+            alt Redis Hit
+                Redis-->>FDR: Return cached response
+            else Redis Miss
+                FDR->>FDR: Load from PostgreSQL
+                FDR->>Redis: Cache response
+            end
+            FDR-->>Vercel: DocsDefinition
+            Vercel->>KV: Cache for future requests
+        end
+        Vercel->>Vercel: Serialize MDX content
+        Vercel-->>Browser: Rendered HTML
+    end
+```
 
 ## End of Components Showcase
 
