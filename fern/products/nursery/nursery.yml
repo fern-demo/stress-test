@@ -1,0 +1,72 @@
+tabs:
+  overview:
+    display-name: Overview
+    icon: book-open
+  nursery-api:
+    display-name: Nursery API
+    icon: puzzle
+  tab-variants:
+    display-name: Growing Guides
+    icon: sprout
+
+navigation:
+  # ── Overview tab ─────────────────────────────────────────────────────
+  - tab: overview
+    layout:
+      - section: About
+        contents:
+          - page: Nursery Overview
+            path: ../../docs/pages/ledger-test/nursery-overview.mdx
+            icon: fa-solid fa-seedling
+          - page: Nursery Catalog
+            path: ../../docs/pages/ledger-test/nursery-linked.mdx
+            slug: catalog
+            icon: fa-solid fa-list
+
+      - section: Operations
+        collapsed: false
+        contents:
+          - page: Shipping Guide
+            path: ../../docs/pages/ledger-test/nursery-shipping.mdx
+          - link: Supplier Portal
+            href: https://suppliers.plantstore.dev
+            icon: fa-solid fa-truck
+
+  # ── Nursery API tab (separate API with overlays) ─────────────────────
+  - tab: nursery-api
+    layout:
+      - api: Nursery API
+        api-name: nursery-api
+
+  # ── Tab Variants ─────────────────────────────────────────────────────
+  - tab: tab-variants
+    variants:
+      - title: Indoor Plants
+        icon: fa-solid fa-house
+        default: true
+        layout:
+          - page: Indoor Growing Guide
+            path: ../../docs/pages/ledger-test/indoor-guide.mdx
+          - section: Resources
+            collapsed: false
+            contents:
+              - link: Light Requirements
+                href: https://plantstore.dev/guides/light
+                icon: fa-solid fa-sun
+              - link: Watering Schedule
+                href: https://plantstore.dev/guides/water
+                icon: fa-solid fa-droplet
+      - title: Outdoor Plants
+        icon: fa-solid fa-tree
+        layout:
+          - page: Outdoor Growing Guide
+            path: ../../docs/pages/ledger-test/outdoor-guide.mdx
+          - section: Resources
+            collapsed: false
+            contents:
+              - link: Soil Guide
+                href: https://plantstore.dev/guides/soil
+                icon: fa-solid fa-mountain
+              - link: Climate Zones
+                href: https://plantstore.dev/guides/climate
+                icon: fa-solid fa-cloud-sun

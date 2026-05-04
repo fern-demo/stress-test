@@ -1,0 +1,128 @@
+tabs:
+  guides:
+    display-name: Guides
+    icon: book
+  plant-api:
+    display-name: Plant API
+    icon: puzzle
+  events:
+    display-name: Events
+    icon: bolt
+  grpc:
+    display-name: gRPC
+    icon: code
+  webhooks:
+    display-name: Webhooks
+    icon: webhook
+  hidden-tab:
+    display-name: Hidden Tab
+    icon: eye-off
+    hidden: true
+  changelog:
+    display-name: Changelog
+    icon: clock
+    changelog: ../../changelog
+
+navigation:
+  # ── Guides tab ───────────────────────────────────────────────────────
+  - tab: guides
+    layout:
+      - section: Get Started
+        slug: get-started
+        contents:
+          - page: Welcome
+            path: ../../docs/pages/ledger-test/welcome.mdx
+            icon: fa-solid fa-hand-wave
+          - page: Getting Started
+            path: ../../docs/pages/ledger-test/getting-started.mdx
+            icon: fa-solid fa-rocket
+          - page: Hidden Draft Page
+            path: ../../docs/pages/ledger-test/hidden-page.mdx
+            hidden: true
+
+      - section: Resources
+        collapsed: true
+        contents:
+          - page: External Resources
+            path: ../../docs/pages/ledger-test/external-resources.mdx
+            icon: fa-solid fa-link
+          - page: Cross-Product Links
+            path: ../../docs/pages/ledger-test/cross-product-links.mdx
+            icon: fa-solid fa-arrow-right-arrow-left
+          - page: API Snippets
+            path: ../../docs/pages/ledger-test/api-snippets.mdx
+            icon: fa-solid fa-code
+
+      - section: Deep Nesting
+        contents:
+          - section: Level 2
+            contents:
+              - section: Level 3
+                contents:
+                  - page: Deeply Nested Page
+                    path: ../../docs/pages/ledger-test/deeply-nested.mdx
+
+      - section: External Links
+        contents:
+          - link: Fern Documentation
+            href: https://buildwithfern.com/learn
+            icon: fa-solid fa-book
+          - link: GitHub Repository
+            href: https://github.com/fern-api/fern
+            icon: fa-brands fa-github
+          - link: Community Slack
+            href: https://slack.buildwithfern.com
+            icon: fa-brands fa-slack
+
+      - section: Hidden Section
+        hidden: true
+        contents:
+          - page: Hidden Section Page
+            path: ../../docs/pages/ledger-test/hidden-section-page.mdx
+
+  # ── Plant API tab (REST with overrides + per-folder layout) ──────────
+  - tab: plant-api
+    layout:
+      - api: Plant API
+        api-name: plant-api
+        layout:
+          - plant:
+              - endpoint: GET /plants/{plantId}
+              - endpoint: POST /plants
+              - endpoint: PUT /plants/{plantId}
+              - endpoint: DELETE /plants/{plantId}
+                hidden: true
+          - store:
+              - endpoint: GET /store/inventory
+              - endpoint: POST /store/order
+          - search:
+              - endpoint: GET /plants/search
+
+  # ── Events tab (AsyncAPI) ────────────────────────────────────────────
+  - tab: events
+    layout:
+      - api: Events API
+        api-name: events-api
+
+  # ── gRPC tab ─────────────────────────────────────────────────────────
+  - tab: grpc
+    layout:
+      - api: gRPC API
+        api-name: grpc-api
+
+  # ── Webhooks tab ─────────────────────────────────────────────────────
+  - tab: webhooks
+    layout:
+      - api: Webhook API
+        api-name: webhook-api
+
+  # ── Hidden tab ───────────────────────────────────────────────────────
+  - tab: hidden-tab
+    layout:
+      - section: Hidden Content
+        contents:
+          - page: Hidden Tab Page
+            path: ../../docs/pages/ledger-test/hidden-tab-page.mdx
+
+  # ── Changelog tab ────────────────────────────────────────────────────
+  - tab: changelog

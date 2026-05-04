@@ -1,0 +1,170 @@
+asyncapi: 2.6.0
+
+info:
+  title: Plant Store Events API
+  version: 1.0.0
+  description: Event-driven API for real-time plant store notifications and inventory tracking.
+
+servers:
+  production:
+    url: events.plantstore.dev
+    protocol: ws
+    description: Production WebSocket server
+
+channels:
+  plant-updates:
+    description: Real-time plant inventory change notifications
+    subscribe:
+      summary: Subscribe to plant inventory events
+      message:
+        oneOf:
+          - $ref: "#/components/messages/PlantAdded"
+          - $ref: "#/components/messages/PlantStatusChanged"
+          - $ref: "#/components/messages/PlantRemoved"
+
+  order-events:
+    description: Order lifecycle event notifications
+    subscribe:
+      summary: Subscribe to order events
+      message:
+        oneOf:
+          - $ref: "#/components/messages/OrderCreated"
+          - $ref: "#/components/messages/OrderShipped"
+
+  inventory-alerts:
+    description: Inventory threshold alert notifications
+    subscribe:
+      summary: Subscribe to inventory alerts
+      message:
+        $ref: "#/components/messages/LowStockAlert"
+
+components:
+  messages:
+    PlantAdded:
+      name: PlantAdded
+      title: Plant added
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/PlantAddedPayload"
+
+    PlantStatusChanged:
+      name: PlantStatusChanged
+      title: Plant status changed
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/PlantStatusPayload"
+
+    PlantRemoved:
+      name: PlantRemoved
+      title: Plant removed
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/PlantRemovedPayload"
+
+    OrderCreated:
+      name: OrderCreated
+      title: Order created
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/OrderCreatedPayload"
+
+    OrderShipped:
+      name: OrderShipped
+      title: Order shipped
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/OrderShippedPayload"
+
+    LowStockAlert:
+      name: LowStockAlert
+      title: Low stock alert
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/LowStockPayload"
+
+  schemas:
+    PlantAddedPayload:
+      type: object
+      properties:
+        plantId:
+          type: string
+        name:
+          type: string
+        species:
+          type: string
+        category:
+          type: string
+        addedAt:
+          type: string
+          format: date-time
+
+    PlantStatusPayload:
+      type: object
+      properties:
+        plantId:
+          type: string
+        previousStatus:
+          type: string
+          enum: [available, sold, pending]
+        newStatus:
+          type: string
+          enum: [available, sold, pending]
+        changedAt:
+          type: string
+          format: date-time
+
+    PlantRemovedPayload:
+      type: object
+      properties:
+        plantId:
+          type: string
+        reason:
+          type: string
+        removedAt:
+          type: string
+          format: date-time
+
+    OrderCreatedPayload:
+      type: object
+      properties:
+        orderId:
+          type: string
+        customerId:
+          type: string
+        plantIds:
+          type: array
+          items:
+            type: string
+        total:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+
+    OrderShippedPayload:
+      type: object
+      properties:
+        orderId:
+          type: string
+        trackingNumber:
+          type: string
+        carrier:
+          type: string
+        shippedAt:
+          type: string
+          format: date-time
+
+    LowStockPayload:
+      type: object
+      properties:
+        plantId:
+          type: string
+        name:
+          type: string
+        currentQuantity:
+          type: integer
+        threshold:
+          type: integer
+        alertedAt:
+          type: string
+          format: date-time
