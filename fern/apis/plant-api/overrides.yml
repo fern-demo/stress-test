@@ -1,0 +1,102 @@
+# API overrides for the Plant API.
+# Tests that overrides are correctly preserved through ledger write/read.
+paths:
+  /plants/{plantId}:
+    get:
+      x-fern-examples:
+        - path-parameters:
+            plantId: plant_001
+          response:
+            body:
+              id: plant_001
+              name: Boston Fern
+              species: Nephrolepis exaltata
+              category: fern
+              status: available
+              price: 24.99
+              tags:
+                - indoor
+                - low-light
+    put:
+      x-fern-examples:
+        - path-parameters:
+            plantId: plant_001
+          request:
+            body:
+              name: Updated Boston Fern
+              status: sold
+              price: 29.99
+          response:
+            body:
+              id: plant_001
+              name: Updated Boston Fern
+              species: Nephrolepis exaltata
+              category: fern
+              status: sold
+              price: 29.99
+              tags:
+                - indoor
+                - low-light
+  /plants:
+    post:
+      x-fern-examples:
+        - request:
+            body:
+              name: Maidenhair Fern
+              species: Adiantum raddianum
+              category: fern
+              price: 18.99
+              tags:
+                - indoor
+                - humidity-loving
+          response:
+            body:
+              id: plant_002
+              name: Maidenhair Fern
+              species: Adiantum raddianum
+              category: fern
+              status: available
+              price: 18.99
+              tags:
+                - indoor
+                - humidity-loving
+  /plants/search:
+    get:
+      x-fern-examples:
+        - query-parameters:
+            query: fern
+            category: fern
+            limit: 10
+          response:
+            body:
+              results:
+                - id: plant_001
+                  name: Boston Fern
+                  species: Nephrolepis exaltata
+                  category: fern
+                  status: available
+                  price: 24.99
+                  tags:
+                    - indoor
+                    - low-light
+              total: 1
+  /store/order:
+    post:
+      x-fern-examples:
+        - request:
+            body:
+              plantIds:
+                - plant_001
+                - plant_002
+              shippingAddress:
+                street: 123 Garden Lane
+                city: Portland
+                state: OR
+                zipCode: "97201"
+              notes: Handle with care
+          response:
+            body:
+              orderId: ord_12345
+              status: confirmed
+              estimatedDelivery: "2024-03-15"
+              total: 43.98

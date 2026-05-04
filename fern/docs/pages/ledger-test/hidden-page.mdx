@@ -1,0 +1,21 @@
+---
+title: Hidden draft page
+subtitle: This page is hidden from navigation but accessible via direct URL
+---
+
+This page has `hidden: true` set in the navigation configuration. It should:
+
+- Not appear in the sidebar navigation
+- Not appear in search results
+- Not appear in `llms.txt`
+- Be accessible via its direct URL
+
+This tests the ledger's handling of the `hidden` flag on individual page routes.
+
+## Content on a hidden page
+
+This content should render identically whether served from `fdr.json` or from the ledger.
+
+<Warning>
+  If you can see this page in the sidebar, the hidden flag is not being respected.
+</Warning>

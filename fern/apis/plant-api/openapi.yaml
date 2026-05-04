@@ -1,0 +1,372 @@
+openapi: 3.1.0
+info:
+  title: Plant API
+  description: API for managing plants in the garden store.
+  version: 1.0.0
+servers:
+  - url: https://api.plantstore.dev/v1
+    description: Production
+paths:
+  /plants/{plantId}:
+    get:
+      tags:
+        - plant
+      summary: Get a plant
+      description: Retrieve details for a specific plant by its ID.
+      operationId: getPlant
+      parameters:
+        - name: plantId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique plant identifier
+      responses:
+        "200":
+          description: Plant details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plant"
+              examples:
+                fern:
+                  summary: A fern plant
+                  value:
+                    id: "plant_001"
+                    name: "Boston Fern"
+                    species: "Nephrolepis exaltata"
+                    category: "fern"
+                    status: "available"
+                    price: 24.99
+                    tags: ["indoor", "low-light", "pet-safe"]
+        "404":
+          description: Plant not found
+    put:
+      tags:
+        - plant
+      summary: Update a plant
+      description: Update an existing plant's details.
+      operationId: updatePlant
+      parameters:
+        - name: plantId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlantUpdate"
+      responses:
+        "200":
+          description: Updated plant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plant"
+    delete:
+      tags:
+        - plant
+      summary: Delete a plant
+      description: Remove a plant from the store inventory.
+      operationId: deletePlant
+      parameters:
+        - name: plantId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Plant deleted
+        "404":
+          description: Plant not found
+  /plants:
+    post:
+      tags:
+        - plant
+      summary: Add a plant
+      description: Add a new plant to the store inventory.
+      operationId: addPlant
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewPlant"
+            examples:
+              indoorFern:
+                summary: Indoor fern
+                value:
+                  name: "Maidenhair Fern"
+                  species: "Adiantum raddianum"
+                  category: "fern"
+                  price: 18.99
+                  tags: ["indoor", "humidity-loving"]
+      responses:
+        "201":
+          description: Plant created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plant"
+  /plants/search:
+    get:
+      tags:
+        - search
+      summary: Search plants
+      description: Search for plants by name, category, or tags.
+      operationId: searchPlants
+      parameters:
+        - name: query
+          in: query
+          schema:
+            type: string
+          description: Search query string
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [fern, succulent, tropical, herb, flowering]
+          description: Filter by plant category
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [available, sold, pending]
+          description: Filter by availability status
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+          description: Maximum results to return
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Plant"
+                  total:
+                    type: integer
+  /store/inventory:
+    get:
+      tags:
+        - store
+      summary: Get inventory
+      description: Retrieve current store inventory counts by status.
+      operationId: getInventory
+      security:
+        - api_key: []
+      responses:
+        "200":
+          description: Inventory counts
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+              example:
+                available: 42
+                sold: 15
+                pending: 7
+  /store/order:
+    post:
+      tags:
+        - store
+      summary: Place an order
+      description: Place a new order for plants.
+      operationId: placeOrder
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        "201":
+          description: Order placed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderConfirmation"
+  /ws/plant-updates:
+    get:
+      tags:
+        - plant
+      summary: Plant updates WebSocket
+      description: |
+        WebSocket connection for real-time plant inventory updates.
+
+        **Connection URL**: `wss://api.plantstore.dev/v1/ws/plant-updates`
+      operationId: plantUpdatesWs
+      x-websocket: true
+      parameters:
+        - name: Connection
+          in: header
+          required: true
+          schema:
+            type: string
+            enum: [Upgrade]
+        - name: Upgrade
+          in: header
+          required: true
+          schema:
+            type: string
+            enum: [websocket]
+      responses:
+        "101":
+          description: WebSocket connection established
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/PlantCreatedEvent"
+                  - $ref: "#/components/schemas/PlantUpdatedEvent"
+        "401":
+          description: Unauthorized
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    api_key:
+      type: apiKey
+      name: X-API-Key
+      in: header
+  schemas:
+    Plant:
+      type: object
+      required: [id, name, species, category, status, price]
+      properties:
+        id:
+          type: string
+          description: Unique plant identifier
+        name:
+          type: string
+          description: Common name of the plant
+        species:
+          type: string
+          description: Scientific name
+        category:
+          type: string
+          enum: [fern, succulent, tropical, herb, flowering]
+        status:
+          type: string
+          enum: [available, sold, pending]
+        price:
+          type: number
+          format: double
+        tags:
+          type: array
+          items:
+            type: string
+    NewPlant:
+      type: object
+      required: [name, species, category, price]
+      properties:
+        name:
+          type: string
+        species:
+          type: string
+        category:
+          type: string
+          enum: [fern, succulent, tropical, herb, flowering]
+        price:
+          type: number
+          format: double
+        tags:
+          type: array
+          items:
+            type: string
+    PlantUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+          enum: [available, sold, pending]
+        price:
+          type: number
+          format: double
+        tags:
+          type: array
+          items:
+            type: string
+    Order:
+      type: object
+      required: [plantIds, shippingAddress]
+      properties:
+        plantIds:
+          type: array
+          items:
+            type: string
+        shippingAddress:
+          $ref: "#/components/schemas/Address"
+        notes:
+          type: string
+    OrderConfirmation:
+      type: object
+      properties:
+        orderId:
+          type: string
+        status:
+          type: string
+        estimatedDelivery:
+          type: string
+          format: date
+        total:
+          type: number
+          format: double
+    Address:
+      type: object
+      required: [street, city, state, zipCode]
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zipCode:
+          type: string
+        country:
+          type: string
+          default: "US"
+    PlantCreatedEvent:
+      type: object
+      properties:
+        event:
+          type: string
+          const: "plant.created"
+        timestamp:
+          type: string
+          format: date-time
+        data:
+          $ref: "#/components/schemas/Plant"
+    PlantUpdatedEvent:
+      type: object
+      properties:
+        event:
+          type: string
+          const: "plant.updated"
+        timestamp:
+          type: string
+          format: date-time
+        data:
+          $ref: "#/components/schemas/Plant"

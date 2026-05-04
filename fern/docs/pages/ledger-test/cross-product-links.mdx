@@ -1,0 +1,26 @@
+---
+title: Cross-product links
+subtitle: Testing navigation links between products
+---
+
+This page lives in **Product A (Garden)** and contains links to pages in **Product B (Nursery)**. The ledger must correctly resolve paths across product boundaries.
+
+## Links to Nursery product
+
+- [Nursery overview](/nursery/overview/about/nursery-overview) links to the Nursery product's overview page.
+- [Nursery catalog](/nursery/overview/about/catalog) links to a page with a custom slug in the Nursery product.
+- [Nursery shipping guide](/nursery/overview/operations/shipping-guide) links to a page in a different section of the Nursery product.
+
+## Links to other Garden pages
+
+- [Welcome page](/garden/guides/get-started/welcome) links back to the Garden welcome page.
+- [API snippets](/garden/guides/resources/api-snippets) links to the API snippets page in a different section.
+
+## Links to API reference pages
+
+- [Plant API](/garden/plant-api) links to the auto-generated Plant API reference.
+- [Nursery API](/nursery/nursery-api) links to the Nursery API in the other product.
+
+<Info>
+  Cross-product links are a key edge case because the ledger decomposes navigation into segments per product. Links that cross segment boundaries must resolve correctly.
+</Info>

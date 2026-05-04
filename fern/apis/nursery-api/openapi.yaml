@@ -1,0 +1,189 @@
+openapi: 3.1.0
+info:
+  title: Nursery API
+  description: API for wholesale nursery operations and bulk plant management.
+  version: 1.0.0
+servers:
+  - url: https://api.plantstore.dev/nursery/v1
+    description: Production
+paths:
+  /bulk/plants:
+    get:
+      tags:
+        - bulk
+      summary: List bulk inventory
+      description: Retrieve the full wholesale plant inventory.
+      operationId: listBulkInventory
+      parameters:
+        - name: minQuantity
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Minimum quantity in stock
+      responses:
+        "200":
+          description: Bulk inventory list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BulkPlant"
+    post:
+      tags:
+        - bulk
+      summary: Add bulk stock
+      description: Add plants in bulk to the nursery inventory.
+      operationId: addBulkStock
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkStockRequest"
+      responses:
+        "201":
+          description: Stock added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BulkStockResponse"
+  /suppliers:
+    get:
+      tags:
+        - suppliers
+      summary: List suppliers
+      description: Retrieve all registered plant suppliers.
+      operationId: listSuppliers
+      responses:
+        "200":
+          description: Supplier list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Supplier"
+  /suppliers/{supplierId}/orders:
+    post:
+      tags:
+        - suppliers
+      summary: Place supplier order
+      description: Place a wholesale order with a supplier.
+      operationId: placeSupplierOrder
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: supplierId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupplierOrder"
+      responses:
+        "201":
+          description: Order placed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupplierOrderConfirmation"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    BulkPlant:
+      type: object
+      properties:
+        sku:
+          type: string
+        name:
+          type: string
+        species:
+          type: string
+        quantity:
+          type: integer
+        wholesalePrice:
+          type: number
+          format: double
+        supplier:
+          type: string
+    BulkStockRequest:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            required: [sku, quantity]
+            properties:
+              sku:
+                type: string
+              quantity:
+                type: integer
+              wholesalePrice:
+                type: number
+                format: double
+    BulkStockResponse:
+      type: object
+      properties:
+        added:
+          type: integer
+        skipped:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: string
+    Supplier:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        region:
+          type: string
+        specialties:
+          type: array
+          items:
+            type: string
+    SupplierOrder:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            required: [sku, quantity]
+            properties:
+              sku:
+                type: string
+              quantity:
+                type: integer
+        deliveryDate:
+          type: string
+          format: date
+    SupplierOrderConfirmation:
+      type: object
+      properties:
+        orderId:
+          type: string
+        supplierId:
+          type: string
+        status:
+          type: string
+        estimatedArrival:
+          type: string
+          format: date

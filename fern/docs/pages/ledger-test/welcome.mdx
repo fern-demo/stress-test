@@ -1,0 +1,50 @@
+---
+title: Welcome to Plant Ledger
+subtitle: Ledger migration regression test site
+slug: welcome
+description: This test site exercises edge cases for the docs-ledger write/read migration.
+---
+
+This site is a comprehensive test fixture for the docs-ledger migration. Each page and configuration choice targets a specific edge case to ensure parity between the monolithic `fdr.json` and the new ledger-backed storage.
+
+## Edge cases covered
+
+<CardGroup cols={2}>
+  <Card title="API overrides" icon="fa-solid fa-pen" href="/garden/plant-api">
+    OpenAPI spec with x-fern-examples overrides
+  </Card>
+  <Card title="API overlays" icon="fa-solid fa-layer-group" href="/nursery/nursery-api">
+    OpenAPI spec with standards-based overlays
+  </Card>
+  <Card title="Multiple spec types" icon="fa-solid fa-code" href="/garden/events">
+    AsyncAPI, gRPC, webhooks, and WebSocket endpoints
+  </Card>
+  <Card title="Cross-product links" icon="fa-solid fa-arrow-right-arrow-left" href="/garden/guides/resources/cross-product-links">
+    Pages linking between products
+  </Card>
+</CardGroup>
+
+<CardGroup cols={2}>
+  <Card title="Hidden pages" icon="fa-solid fa-eye-slash" href="/garden/guides/get-started/hidden-draft-page">
+    Pages, sections, tabs, and endpoints with hidden: true
+  </Card>
+  <Card title="External links" icon="fa-solid fa-external-link" href="/garden/guides">
+    Navigation entries pointing to external URLs
+  </Card>
+  <Card title="Deep nesting" icon="fa-solid fa-layer-group" href="/garden/guides/deep-nesting/level-2/level-3/deeply-nested-page">
+    Three levels of nested sections
+  </Card>
+  <Card title="Tab variants" icon="fa-solid fa-toggle-on" href="/nursery/tab-variants">
+    Tabs with variant layouts
+  </Card>
+</CardGroup>
+
+<Markdown src="/docs/snippets/watering-tip.mdx" />
+
+## Redirect tests
+
+These links exercise the redirect configuration:
+
+- [Old welcome page](/old-welcome) redirects to this page
+- [Legacy API](/legacy-api/plants) redirects to the Plant API
+- [Legacy nursery](/legacy-nursery) redirects to the Nursery overview

@@ -1,0 +1,135 @@
+openapi: 3.1.0
+info:
+  title: Plant Store Webhook API
+  version: 1.0.0
+  description: |
+    Webhook API for the Plant Store. Configure webhook endpoints to receive
+    real-time notifications about plant inventory and order events.
+
+    All webhook requests include an `X-Webhook-Signature` header for verification.
+servers:
+  - url: https://api.plantstore.dev/v1
+    description: Production
+webhooks:
+  plantAvailable:
+    post:
+      tags:
+        - inventory
+      summary: Plant available
+      description: Triggered when a plant becomes available in the store.
+      operationId: onPlantAvailable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlantAvailableEvent"
+            examples:
+              fernAvailable:
+                summary: Fern plant available
+                value:
+                  event: "plant.available"
+                  timestamp: "2024-01-15T10:30:00Z"
+                  data:
+                    plantId: "plant_001"
+                    name: "Boston Fern"
+                    price: 24.99
+                    quantity: 15
+      responses:
+        "200":
+          description: Webhook processed
+  orderFulfilled:
+    post:
+      tags:
+        - orders
+      summary: Order fulfilled
+      description: Triggered when an order has been fully fulfilled and shipped.
+      operationId: onOrderFulfilled
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderFulfilledEvent"
+      responses:
+        "200":
+          description: Webhook processed
+  lowStock:
+    post:
+      tags:
+        - inventory
+      summary: Low stock warning
+      description: Triggered when plant stock falls below the configured threshold.
+      operationId: onLowStock
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LowStockEvent"
+      responses:
+        "200":
+          description: Webhook processed
+components:
+  schemas:
+    PlantAvailableEvent:
+      type: object
+      properties:
+        event:
+          type: string
+          const: "plant.available"
+        timestamp:
+          type: string
+          format: date-time
+        data:
+          type: object
+          properties:
+            plantId:
+              type: string
+            name:
+              type: string
+            price:
+              type: number
+            quantity:
+              type: integer
+    OrderFulfilledEvent:
+      type: object
+      properties:
+        event:
+          type: string
+          const: "order.fulfilled"
+        timestamp:
+          type: string
+          format: date-time
+        data:
+          type: object
+          properties:
+            orderId:
+              type: string
+            trackingNumber:
+              type: string
+            carrier:
+              type: string
+            deliveredAt:
+              type: string
+              format: date-time
+    LowStockEvent:
+      type: object
+      properties:
+        event:
+          type: string
+          const: "inventory.low_stock"
+        timestamp:
+          type: string
+          format: date-time
+        data:
+          type: object
+          properties:
+            plantId:
+              type: string
+            name:
+              type: string
+            currentQuantity:
+              type: integer
+            threshold:
+              type: integer

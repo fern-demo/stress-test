@@ -1,0 +1,14 @@
+# OpenAPI overlay for the Nursery API.
+# Tests that overlays are correctly preserved through ledger write/read.
+overlay: 1.0.0
+info:
+  title: Nursery API overlay
+  version: 1.0.0
+actions:
+  - target: "$.paths./bulk/plants.get.description"
+    update: |
+      Retrieve the full wholesale plant inventory with real-time stock levels.
+      Results are sorted by SKU and include supplier information.
+  - target: "$.paths./suppliers.get.description"
+    update: |
+      Retrieve all registered plant suppliers including their specialties and regions.

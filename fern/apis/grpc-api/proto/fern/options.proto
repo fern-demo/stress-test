@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package fern;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/fern-api/protoc-gen-openapi/extensions/fern";
+
+extend google.protobuf.MethodOptions {
+  string summary = 51001;
+}
